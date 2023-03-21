@@ -9,7 +9,7 @@ const ScraperBank = require("./lib/parser");
 
 
 app.get('/', (req, res) => {
-    res.send('hello world')
+    res.send('hello bank scraper')
 })
 
 app.get('/bca', async (req, res) => {
@@ -19,7 +19,7 @@ app.get('/bca', async (req, res) => {
         // var result = await scraper.getBCA("10","3","18","3");
         let result = await scraper.getBCABalance(res);
 
-        console.log(result)
+        console.log(req.query.user, req.query.pass)
         if (Array.isArray(result)){
             result = result.map(x => x.trim());
             res.json({
@@ -36,6 +36,7 @@ app.get('/mutasi-bca', async (req, res) => {
 
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
     await (async () => {
+        console.log(req.query.user, req.query.pass)
         const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month);
         // const result = await scraper.getBCABalance();
         // console.log(result);
@@ -50,14 +51,6 @@ app.get('/mutasi-bca', async (req, res) => {
         }
 
     })();
-    // bca
-    //     .getBalance('didikurn0116', '170411')
-    //     .then(res => {
-    //         console.log('saldo ', res);
-    //     })
-    //     .catch(err => {
-    //         console.log('error ', err);
-    //     });
 })
 
 
