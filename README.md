@@ -2,6 +2,7 @@
 
 
 # how to install 
+- clone
 - npm install
 - done
 
