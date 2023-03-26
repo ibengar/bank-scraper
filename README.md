@@ -3,7 +3,12 @@
 
 # how to install 
 - clone
-- npm install
+- npm install 
+- done
+
+# how to install on CENTOS 
+- clone
+- yarn install (ref : https://linuxize.com/post/how-to-install-yarn-on-centos-7/)
 - done
 
 
