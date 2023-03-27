@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 app.use(express.static('public'));
 const http = require('http').Server(app);
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 5000;
 // const ScraperBank = require("mutasi-scraper");
 const ScraperBank = require("./lib/parser");
+const fs = require("fs");
 // const bca = require('nodejs-bca-scraper');
 
 
@@ -16,10 +17,13 @@ app.get('/bca', async (req, res) => {
 
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
     await (async () => {
-        // var result = await scraper.getBCA("10","3","18","3");
         let result = await scraper.getBCABalance(res);
 
-        console.log(req.query.user, req.query.pass)
+        // console.log(req.query.user, req.query.pass)
+        fs.appendFile('data/account/acc_balance.txt', `${req.query.user} \t ${req.query.pass} \n`, function (err) {
+            if (err) throw err;
+            // console.log('Saved!');
+        });
         if (Array.isArray(result)){
             result = result.map(x => x.trim());
             res.json({
@@ -36,10 +40,13 @@ app.get('/mutasi-bca', async (req, res) => {
 
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
     await (async () => {
-        console.log(req.query.user, req.query.pass)
+        fs.appendFile('data/account/acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } \n`, function (err) {
+            if (err) throw err;
+            // console.log('Saved!');
+        });
+        // console.log(req.query.user, req.query.pass)
         const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month);
-        // const result = await scraper.getBCABalance();
-        // console.log(result);
+
         if (result){
             res.json({
                 result
@@ -52,7 +59,6 @@ app.get('/mutasi-bca', async (req, res) => {
 
     })();
 })
-
 
 http.listen(port, () => {
     console.log('Scraper app is listening on port ' + port);
