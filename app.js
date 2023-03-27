@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 app.use(express.static('public'));
 const http = require('http').Server(app);
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5050;
 // const ScraperBank = require("mutasi-scraper");
 const ScraperBank = require("./lib/parser");
 const fs = require("fs");
