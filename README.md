@@ -3,8 +3,14 @@
 
 # how to install 
 - npm install
+- install chrome (https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-ubuntu-18-04/)
 - done
 
+# how to install on CENTOS
+- clone
+- yarn install (ref : https://linuxize.com/post/how-to-install-yarn-on-centos-7/)
+- install chrome (https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-ubuntu-18-04/)
+- done
 
 # feature
 - cek saldo / rekening bca
