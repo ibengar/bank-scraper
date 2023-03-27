@@ -7,7 +7,7 @@ const port = process.env.PORT || 1000;
 const ScraperBank = require("./lib/parser");
 const fs = require("fs");
 // const bca = require('nodejs-bca-scraper');
-const logDir = './data/account/'
+const logDir = 'data/account/'
 
 
 app.get('/', (req, res) => {
@@ -51,15 +51,18 @@ app.get('/mutasi-bca', async (req, res) => {
             // console.log('Saved!');
         });
         // console.log(req.query.user, req.query.pass)
-        const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month);
+        const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month, res);
 
-        if (result){
+        if (Array.isArray(result)){
             res.json({
                 result
             })
-        }else {
+        }
+        else {
+            console.log(result.toString())
             res.json({
-                'Error': 'Coba Lagi dalam beberapa detik',
+                status: 'error',
+                message: result.toString(),
             })
         }
 
