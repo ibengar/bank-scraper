@@ -1,2 +1,4 @@
 /node_modules
 .env
+data/account/acc_balance.txt
+data/account/acc_mutation.txt
