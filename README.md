@@ -2,8 +2,13 @@
 
 
 # how to install 
-- npm install
-- install chrome (https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-ubuntu-18-04/)
+- clone
+- npm install 
+- done
+
+# how to install on CENTOS 
+- clone
+- yarn install (ref : https://linuxize.com/post/how-to-install-yarn-on-centos-7/)
 - done
 
 # how to install on CENTOS
