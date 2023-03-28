@@ -88,7 +88,7 @@ app.get('/mutasi-bca', async (req, res) => {
     let i = 1;
     while (!await bcaMutation(req, res, scraper)) {
         // kalo true dia stop
-        if (i === 5) {
+        if (i === 10) {
             console.log('Failed to retrieve data mutation in ' + i + ' times')
             res.json({
                 status: 'Failed to retrieve data mutation',
@@ -101,7 +101,7 @@ app.get('/mutasi-bca', async (req, res) => {
         // Keep executing the function until it returns true
     }
 
-    fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } time : ${ moment().format() } \t ${ i } times ${ i === 5 ? 'fail': ''} \n`, function (err) {
+    fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } time : ${ moment().format() } \t ${ i } times ${ i === 10 ? 'fail': ''} \n`, function (err) {
         if (err) throw err;
         // console.log('Saved!');
     });
