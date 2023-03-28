@@ -59,13 +59,13 @@ app.get('/mutasi-bca', async (req, res) => {
                 result
             })
         }
-        else {
-            console.log(result.toString())
-            res.json({
-                status: 'error',
-                message: result.toString(),
-            })
-        }
+        // else {
+        //     console.log(result.toString())
+        //     res.json({
+        //         status: 'error',
+        //         message: result.toString(),
+        //     })
+        // }
 
     })();
 })
