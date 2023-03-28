@@ -40,31 +40,84 @@ app.get('/bca', async (req, res) => {
     })();
 })
 
+app.get('/mutasi-bca-multi-account', async (req, res) => {
+    // console.log(moment().format())
+    const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
+    if (!fs.existsSync(logDir)){
+        fs.mkdirSync(logDir, { recursive: true });
+    }
+    fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } time : ${ moment().format() } \n`, function (err) {
+        if (err) throw err;
+        // console.log('Saved!');
+    });
+
+    // console.log(await bcaMutation(req, res, scraper));
+
+    let i = 0;
+    while (!await bcaMutation(req, res, scraper)) {
+        // kalo true dia stop
+        i++;
+        console.log(i)
+        // Keep executing the function until it returns true
+    }
+
+    // const mutation = await (async () => {
+    //
+    //     // console.log(req.query.user, req.query.pass)
+    //     const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month, res);
+    //
+    //     if (Array.isArray(result)){
+    //         res.json({
+    //             result
+    //         })
+    //         return true
+    //     }
+    //     else {
+    //         return false
+    //         // console.log(result.toString())
+    //         // res.json({
+    //         //     status: 'error',
+    //         //     message: result.toString(),
+    //         // })
+    //     }
+    //
+    // })();
+
+    // res.json({
+    //     status: 'good',
+    //     scraper
+    // })
+})
+
 app.get('/mutasi-bca', async (req, res) => {
     // console.log(moment().format())
     const scraper = new ScraperBank(req.query.user, req.query.pass); // username dan password akun ibanking
+    if (!fs.existsSync(logDir)){
+        fs.mkdirSync(logDir, { recursive: true });
+    }
+    fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } time : ${ moment().format() } \n`, function (err) {
+        if (err) throw err;
+        // console.log('Saved!');
+    });
+
     await (async () => {
-        if (!fs.existsSync(logDir)){
-            fs.mkdirSync(logDir, { recursive: true });
-        }
-        fs.appendFile(logDir + 'acc_mutation.txt', `${req.query.user} \t ${req.query.pass} \t from_date: ${ req.query.from_date } from_month: ${ req.query.from_month } to_date: ${ req.query.to_date } to_month: ${ req.query.to_month } time : ${ moment().format() } \n`, function (err) {
-            if (err) throw err;
-            // console.log('Saved!');
-        });
+
         // console.log(req.query.user, req.query.pass)
-        const result = await scraper.getBCA(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month, res);
+        const result = await scraper.getBCAMutation(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month, res);
 
         if (Array.isArray(result)){
             res.json({
                 result
             })
+            // return true
         }
         // else {
-        //     console.log(result.toString())
-        //     res.json({
-        //         status: 'error',
-        //         message: result.toString(),
-        //     })
+            // return false
+            // console.log(result.toString())
+            // res.json({
+            //     status: 'error',
+            //     message: result.toString(),
+            // })
         // }
 
     })();
@@ -74,5 +127,23 @@ http.listen(port, () => {
     console.log('Scraper app is listening on port ' + port);
 });
 
+async function bcaMutation(req, res, scraper) {
+    // console.log(req.query.user, req.query.pass)
+    const result = await scraper.getBCA(req.query.from_date, req.query.from_month, req.query.to_date, req.query.to_month, res);
+
+    if (Array.isArray(result)) {
+        res.json({
+            result
+        })
+        return true
+    } else {
+        return false
+        // console.log(result.toString())
+        // res.json({
+        //     status: 'error',
+        //     message: result.toString(),
+        // })
+    }
+}
 
 
