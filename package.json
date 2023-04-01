@@ -19,15 +19,18 @@
     "date-format": "^4.0.10",
     "express": "^4.18.2",
     "form-data": "^4.0.0",
+    "http-proxy-agent": "^5.0.0",
     "karma-chrome-launcher": "^3.1.1",
     "moment": "^2.29.4",
     "mutasi-scraper": "^1.9.5",
     "nodejs-bca-scraper": "^1.0.1",
     "nodejs-klikbca-parser": "^1.0.6",
     "nodejs-klikbca-scrapper": "^1.0.1",
+    "playwright": "^1.32.1",
     "puppeteer": "^19.7.5",
     "puppeteer-core": "^19.7.5",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "socks-proxy-agent": "^7.0.0"
   }
 }
