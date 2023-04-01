@@ -13,8 +13,7 @@ const { chromium } = require('playwright');
 const {UA} =require("./lib/helper/UA");
 
 const axios = require('axios');
-const HttpProxyAgent = require('http-proxy-agent');
-const SocksProxyAgent = require('socks-proxy-agent');
+const { ProxyChain } = require('proxy-chain');
 
 
 app.get('/', (req, res) => {
@@ -59,10 +58,8 @@ app.get('/mutasi-bca', async (req, res) => {
     });
 
     await (async () => {
-
-        // console.log(req.query.user, req.query.pass)
         const result = await scraper.getBCAMutation(req.query.from_date,req.query.from_month, req.query.to_date,req.query.to_month, res);
-
+ 
         if (Array.isArray(result)){
             res.json({
                 result
@@ -269,22 +266,30 @@ app.get('/mutasi-bca-playwright', async (req, res) => {
 })
 
 app.get('/bca-proxy', async (req, res) => {
+    const url = 'https://scraper.didirumapea.my.id/mutasi-bca?from_date=28&from_month=3&to_date=28&to_month=3&user=zaidanal1803&pass=123546'
 
+    const proxyList = [
+        'http://vgfkyusq:h9bzem0wbdh0@45.67.3.74:6237',
+        'http://vgfkyusq:h9bzem0wbdh0@45.67.2.21:5595',
+        // add more proxies as needed
+    ];
 
-
-    const url = 'http://localhost:1000/mutasi-bca?from_date=28&from_month=3&to_date=28&to_month=3&user=didikurn0116&pass=170411'
-
-    // make a request using a rotating proxy
-    axios.get(url, {
-        httpAgent: getNextHttpAgent(),
-        httpsAgent: getNextHttpsAgent()
-    })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    axios.get(url,
+        {
+            proxy: {
+                protocol: 'http',
+                host: '45.67.3.74',
+                port: 6237,
+                auth: {
+                    username: 'vgfkyusq',
+                    password: 'h9bzem0wbdh0'
+                }
+            }
+        }
+    )
+        .then(res => {
+            console.log(res.data)
+        }).catch(err => console.error(err))
 
 })
 
@@ -311,33 +316,3 @@ async function bcaMutation(req, res, scraper) {
     }
 }
 
-const proxyList = [
-    'http://vgfkyusq:h9bzem0wbdh0@45.67.3.74:6237',
-    'http://vgfkyusq:h9bzem0wbdh0@45.67.2.21:5595',
-    // add more proxies as needed
-];
-
-// rotate proxies before each request
-const getNextProxy = () => {
-    const proxyUrl = proxyList.shift(); // get the next proxy in the list
-    proxyList.push(proxyUrl); // put the used proxy at the end of the list
-    return proxyUrl;
-};
-
-
-
-// create an agent based on the proxy type
-const getNextHttpAgent = () => {
-    const proxyUrl = getNextProxy();
-    return new HttpProxyAgent(proxyUrl);
-};
-
-const getNextHttpsAgent = () => {
-    const proxyUrl = getNextProxy();
-    const protocol = new URL(proxyUrl).protocol;
-    if (protocol === 'socks:') {
-        return new SocksProxyAgent(proxyUrl);
-    } else {
-        return new HttpProxyAgent(proxyUrl);
-    }
-};

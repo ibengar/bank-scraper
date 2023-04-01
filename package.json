@@ -27,6 +27,7 @@
     "nodejs-klikbca-parser": "^1.0.6",
     "nodejs-klikbca-scrapper": "^1.0.1",
     "playwright": "^1.32.1",
+    "proxy-chain": "^2.3.0",
     "puppeteer": "^19.7.5",
     "puppeteer-core": "^19.7.5",
     "puppeteer-extra": "^3.3.6",
